@@ -1,0 +1,206 @@
+:root {
+  --pane-border: #2d2d2d;
+  --pane-border-active: #555;
+  --pane-easing: cubic-bezier(0.16, 0.84, 0.24, 1.08);
+  --pane-motion-layout: 240ms;
+  --pane-motion-tab: 190ms;
+  --pane-surface: #121212;
+  --pane-text: #ddd;
+  --pane-text-muted: #777;
+}
+
+.pane-layout {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  contain: strict;
+  background: var(--pane-surface);
+}
+
+.pane-group {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: 28px minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid transparent;
+  background: var(--pane-surface);
+  transform-origin: top left;
+  will-change: transform, width, height;
+}
+
+.pane-group:hover,
+.pane-group.is-pane-active {
+  border-color: var(--pane-border-active);
+}
+
+.pane-group.is-pane-headerless {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.pane-group.is-pane-headerless > .pane-tabs {
+  display: none;
+}
+
+.pane-tabs {
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  border-bottom: 1px solid var(--pane-border);
+  background: var(--pane-surface);
+}
+
+.pane-tabs-list {
+  display: flex;
+  min-width: 0;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 0 7px;
+}
+
+.pane-tab {
+  position: relative;
+  display: flex;
+  height: 100%;
+  min-width: 0;
+  align-items: stretch;
+  border: 0;
+  margin: 0;
+  background: transparent;
+  padding: 0 2px;
+  color: var(--pane-text-muted);
+  cursor: default;
+  font: inherit;
+  font-size: 11px;
+}
+
+.pane-tab:not(:first-child) {
+  padding-left: 15px;
+}
+
+.pane-tab:not(:first-child)::before {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  color: var(--pane-border-active);
+  content: '/';
+  transform: translateY(-52%);
+}
+
+.pane-tab-active {
+  color: var(--pane-text);
+}
+
+.pane-tab-content {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+}
+
+.pane-tab-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pane-tab-close {
+  display: grid;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  margin-left: 2px;
+  place-items: center;
+  border-radius: 3px;
+  color: var(--pane-text-muted);
+}
+
+.pane-group-content {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pane-group-content > .pane-panel {
+  position: absolute;
+  inset: 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pane-sash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 18;
+  background: transparent;
+  touch-action: none;
+}
+
+.pane-sash:hover {
+  background: var(--pane-border-active);
+}
+
+.pane-sash-horizontal {
+  cursor: ew-resize;
+}
+
+.pane-sash-vertical {
+  cursor: ns-resize;
+}
+
+.pane-group.is-pane-floating {
+  z-index: 80;
+  border-color: var(--pane-border-active);
+  box-shadow: 0 18px 48px rgb(0 0 0 / 55%);
+  opacity: 0.96;
+  pointer-events: none;
+}
+
+.pane-group.is-pane-exiting {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.pane-group.is-pane-drop-target::before {
+  position: absolute;
+  z-index: 24;
+  border: 1px solid var(--pane-border-active);
+  background: rgb(255 255 255 / 10%);
+  content: '';
+  pointer-events: none;
+}
+
+.pane-group.is-pane-drop-target.pane-drop-within::before {
+  inset: 4px;
+}
+
+.pane-group.is-pane-drop-target.pane-drop-left::before {
+  inset: 4px 50% 4px 4px;
+}
+
+.pane-group.is-pane-drop-target.pane-drop-right::before {
+  inset: 4px 4px 4px 50%;
+}
+
+.pane-group.is-pane-drop-target.pane-drop-above::before {
+  inset: 4px 4px 50%;
+}
+
+.pane-group.is-pane-drop-target.pane-drop-below::before {
+  inset: 50% 4px 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pane-layout *,
+  .pane-layout *::before,
+  .pane-layout *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
